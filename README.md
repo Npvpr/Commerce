@@ -26,5 +26,6 @@ Website Link: https://commerce-never.herokuapp.com/
 
 <h2>Remaining Problems</h2>
 <ul>
+    <li>Not all errors/bugs are handled yet</li>
     <li>Not mobile responsive</li>
 </ul>

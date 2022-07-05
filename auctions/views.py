@@ -305,3 +305,7 @@ def category_detail(request, category):
         "listing": listing,
         "category": category,
         })
+
+"""
+    - Since Heroku is connected to git repo, whenever commiting changes to git, the database file(sqlite file) kept changing back
+"""
