@@ -1,0 +1,135 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row error_row">
+            {% if error_message %}
+                <div class="alert alert-danger" role="alert">
+                    {{error_message}}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="row heading_row">
+            <h2>Listing: {{ element.listed_item.item_name }}</h2>
+        </div>
+
+        <div class="row watchlist_row">
+            {% if watched_list_id %}
+                <form action="{% url 'remove_watchlist' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="watched_list_id" value="{{ watched_list_id }}">
+                    <input type="hidden" name="element_id" value="{{ element.id }}">
+                    <input type="submit" name="remove" value="Remove from Watchlist" class="btn btn-dark">
+                </form>
+            {% else %}
+                <form action="{% url 'add_watchlist' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="element_id" value="{{ element.id }}">
+                    <input type="submit" name="add" value="Add to Watchlist" class="btn btn-dark">
+                </form>       
+            {% endif %}
+        </div>
+        
+        <div class="row image_row">
+            <div class="col my-auto text-center">
+            {% if not element.listed_item.item_image %}
+                No Image
+            {% else %}
+                <img src="{{ element.listed_item.item_image }}" alt="{{ element.listed_item.item_name }}" class="item_detail_image">
+            {% endif %}
+            </div>
+        </div>
+
+        <div class="row description_row">
+            {{ element.description }}
+        </div>
+        
+        {% if element.sold %}
+            {% if current_user == element.listed_item.owner %}
+                <div class="alert alert-success" role="alert">
+                    Congratulations!!! You got this item for $ {{ element.floor_price }}.
+                </div>
+            {% else %}
+                <div class="alert alert-primary" role="alert">
+                    This item is sold to {{ element.listed_item.owner| capfirst }} for $ {{ element.floor_price }}.
+                </div>
+            {% endif %}            
+        {% elif current_user == element.lister %}
+            <div class="floor_price">
+                $ {{ element.floor_price }}
+            </div>           
+                {% if not bid_count %}
+                    <div>
+                        No bid so far.
+                    </div>
+                {% else %}
+                    <div>
+                        {{ bid_count }} bid(s) so far. {{ current_bidder| capfirst }}'s bid is the current bid.
+                    </div>
+                    
+                    <div class="form_div">
+                    <form action="{% url 'close_bidding' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="current_bidder_id" value="{{ current_bidder.id }}">
+                        <input type="hidden" name="element_id" value="{{ element.id }}">
+                        <button type="submit" class="btn btn-dark bid_btn">Close Bid</button>
+                    </form>
+                    </div>
+                {% endif %}               
+        {% else %}
+            <div class="floor_price">
+                $ {{ element.floor_price }}
+            </div>
+            <div class="bid_detail">
+                {% if not bid_count %}
+                    No bid so far.
+                {% else %}
+                    {{ bid_count }} bid(s) so far.
+                    {% if current_user == current_bidder %}
+                        Your bid is the current bid.
+                    {% else %}
+                        {{ current_bidder| capfirst }}'s bid is the current bid.
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="form_div">
+            <form action="{% url 'bidding' %}" method="post">
+                {% csrf_token %}
+                <input type="number" name="current_bidded_price" placeholder="Bid" required class="form-control">
+                <input type="hidden" name="element_id" value="{{ element.id }}">
+                <input type="submit" value="Place Bid" class="btn btn-dark bid_btn">
+            </form>
+            </div>
+        {% endif %}
+
+        <h3>Details</h3>
+        <ul>
+            <li>Listed by: {{ element.lister| capfirst }}</li>
+            {% if not element.listed_item.item_category %}
+                <li>Category: No Category Listed</li>
+            {% else %}
+                <li>Category: {{ element.listed_item.item_category }}</li>
+            {% endif %}
+        </ul>
+
+        {% for cm in comments %}
+            <div class="row commenter">
+                {{ cm.commenter| capfirst }}
+            </div>
+            <div class="row comment">
+                {{ cm.comment }}
+            </div>
+            
+        {% endfor %}
+        <form action="{% url 'commenting' %}" method="post" name="comment_form">
+            {% csrf_token %}
+            <input type="text" name="comment" autocomplete="off" required class="form-control">
+            <input type="hidden" name="commented_item_id" value="{{ element.listed_item.id }}">
+            <input type="hidden" name="commenter_id" value="{{ current_user.id }}">
+            <input type="hidden" name="element_id" value="{{ element.id }}">
+            <input type="submit" value="Comment" class="btn btn-dark comment_btn">
+        </form>
+
+    </div>
+{% endblock %}

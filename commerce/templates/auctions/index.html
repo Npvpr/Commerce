@@ -1,0 +1,42 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if watchlist %}
+        <h2>Watchlist</h2>
+    {% elif category %}
+        <h2>{{ category| capfirst }}</h2>
+    {% else %}
+        <h2>Active Listings</h2>
+    {% endif %}
+    <div class="container-fluid">
+        {% if not listing %}
+            No Listing
+        {% else %}
+        {% for element in listing %}
+            <a href="{% url 'item_detail' element.id %}">
+                <div class="row listed_element_row">
+                    <div class="col-4 listed_element_image_column my-auto text-center">
+                        {% if not element.listed_item.item_image %}
+                                No Image
+                        {% else %}
+                            <img src="{{ element.listed_item.item_image }}" alt="{{ element.listed_item.item_name }}" class="listed_element_image">
+                        {% endif %}
+                    </div>
+                    <div class="col listed_element_detail_column">
+                        <div class="row listed_element_name_row">
+                            {{ element.listed_item.item_name }}
+                        </div>
+                        <div class="row listed_element_price_row">
+                            Price: $ {{ element.floor_price}}
+                        </div>
+                        <div class="row listed_element_time_row">
+                            Created {{ element.listed_time }}
+                        </div>                    
+                    </div>
+                </div>
+            </a>
+            </form> 
+        {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}
