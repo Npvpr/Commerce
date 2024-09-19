@@ -1,8 +1,6 @@
 <h1>Commerce</h1>
 <p>Hi, this is one of the projects from CS50 Web. This project is a simple auction site where users can list or bid items. This project is simply for practising my django skills for manipulating database.</p>
 
-Website Link: https://commerce-never.herokuapp.com/
-
 <h2>Features Supported</h2>
 <ul>
     <li>Login, Logout, Register Users</li>
