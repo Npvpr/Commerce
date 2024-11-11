@@ -18,7 +18,6 @@
     <li>Used <b>Django Auth Library</b> for User Authentication and Authorization</li>
     <li>Built <b>CRUD</b> operations using <b>Django Forms</b> and <b>Django Models</b></li>
     <li>Used Django's default database, <b>SQLite</b></li>
-    <li>Deployed the website on <b>Heroku</b></li>
     <li>Used: <b>HTML, CSS, Bootstrap, JavaScript, Python, Django, SQLite</b></li>
 </ul>
 
