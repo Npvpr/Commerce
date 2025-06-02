@@ -11,4 +11,4 @@ def ping_periodically():
             print(f"Ping response status: {response.status_code}")
         except Exception as e:
             print(f"Ping failed: {e}")
-        time.sleep(1 * 60)  # Sleep 12 minutes
+        time.sleep(12 * 60)  # Sleep 12 minutes
