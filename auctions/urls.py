@@ -2,6 +2,11 @@ from django.urls import path
 
 from . import views
 
+def ping(request):
+    from datetime import datetime
+    print(f"Ping received at {datetime.now()}")
+    return JsonResponse({"status": "ok", "time": str(datetime.now())})
+
 urlpatterns = [
     path("", views.index, name="index"),
     path("login", views.login_view, name="login"),
@@ -18,4 +23,5 @@ urlpatterns = [
     path("remove_watchlist", views.remove_watchlist, name="remove_watchlist"),
     path("categories", views.categories, name="categories"),
     path("category_detail/<str:category>", views.category_detail, name="category_detail"),
+    path("ping/", ping),
 ]
